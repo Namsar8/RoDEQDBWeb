@@ -1,0 +1,514 @@
+body {
+  font-family: 'Consolas', 'Courier New', monospace;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: #333;
+  overflow-x: auto;
+}
+
+h1 {
+  color: #2c3e50;
+  text-align: center;
+  margin: 10px 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #f5f5f5;
+  z-index: 100;
+  border-bottom: 1px solid #ddd;
+}
+
+#version {
+  font-size: 0.8rem;
+  color: #666;
+  text-align: right;
+  position: fixed;
+  top: 3px;
+  right: 10px;
+  z-index: 101;
+}
+
+#controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 5px;
+  background: white;
+  position: fixed;
+  top: 25px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+#controls select {
+  width: 110px; /* Compact width to fit all 6 filters */
+  max-width: 110px;
+  padding: 5px;
+  font-size: 0.75rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+}
+
+#controls input {
+  padding: 5px;
+  font-size: 0.9rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+}
+
+#controls button {
+  padding: 5px;
+  font-size: 0.9rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  transition: border-color 0.2s;
+}
+#controls select:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+#search {
+  flex: 1 0 200px;
+  min-width: 150px;
+}
+
+#openFilters {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 1rem;
+}
+
+#openFilters:hover {
+  background-color: #2980b9;
+}
+
+#defaultView {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px;
+  font-size: 1rem;
+}
+
+#defaultView:hover {
+  background-color: #7f8c8d;
+}
+
+/* Main content area with top margin for fixed headers */
+#main-content {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 42px;
+}
+
+/* Table container with NO vertical scroll */
+#table-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden; /* No vertical scroll */
+  border: 1px solid #ddd;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  font-size: 0.75rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  table-layout: fixed; /* Force fixed table layout */
+}
+
+/* Fixed column widths based on ColMaxW array from original Delphi source */
+.col-id { width: 35px; min-width: 35px; max-width: 35px; } /* 4 characters for ID */
+.col-type { width: 80px; min-width: 80px; max-width: 80px; }
+.col-wearloc { width: 60px; min-width: 60px; max-width: 60px; }
+.col-name { width: 250px; min-width: 250px; max-width: 250px; }
+.col-lv { width: 40px; min-width: 40px; max-width: 40px; }
+.col-ac { width: 30px; min-width: 30px; max-width: 30px; }
+.col-acadd { width: 40px; min-width: 40px; max-width: 40px; }
+.col-d1 { width: 40px; min-width: 40px; max-width: 40px; }
+.col-d2 { width: 40px; min-width: 40px; max-width: 40px; }
+.col-hr { width: 30px; min-width: 30px; max-width: 30px; }
+.col-dr { width: 30px; min-width: 30px; max-width: 30px; }
+.col-hp { width: 30px; min-width: 30px; max-width: 30px; }
+.col-mp { width: 30px; min-width: 30px; max-width: 30px; }
+.col-st { width: 30px; min-width: 30px; max-width: 30px; }
+.col-de { width: 30px; min-width: 30px; max-width: 30px; }
+.col-co { width: 30px; min-width: 30px; max-width: 30px; }
+.col-in { width: 30px; min-width: 30px; max-width: 30px; }
+.col-wi { width: 30px; min-width: 30px; max-width: 30px; }
+.col-lk { width: 30px; min-width: 30px; max-width: 30px; }
+.col-ch { width: 30px; min-width: 30px; max-width: 30px; }
+.col-mv { width: 40px; min-width: 40px; max-width: 40px; }
+.col-wgt { width: 40px; min-width: 40px; max-width: 40px; }
+.col-value { width: 70px; min-width: 70px; max-width: 70px; }
+.col-flags { width: 60px; min-width: 60px; max-width: 60px; }
+.col-antis { width: 100px; min-width: 100px; max-width: 100px; }
+.col-races { width: 80px; min-width: 80px; max-width: 80px; }
+.col-other { width: 150px; min-width: 150px; max-width: 150px; }
+.col-mob { width: 120px; min-width: 120px; max-width: 120px; }
+.col-area { width: 100px; min-width: 100px; max-width: 100px; }
+.col-date { width: 70px; min-width: 70px; max-width: 70px; }
+.col-user { width: 80px; min-width: 80px; max-width: 80px; }
+
+th {
+  background-color: #34495e;
+  color: white;
+  padding: 5px;
+  text-align: left;
+  font-weight: bold;
+  font-size: 0.75rem;
+  top: 0;
+  z-index: 10;
+  border-right: 1px solid #2c3e50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+th:hover {
+  background-color: #2c3e50;
+}
+
+th.hidden-column {
+  display: none;
+}
+
+th .sort-arrow {
+  position: absolute;
+  right: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  opacity: 0.7;
+}
+
+th .sort-arrow.asc::after {
+  content: '▲';
+}
+
+th .sort-arrow.desc::after {
+  content: '▼';
+}
+
+td {
+  padding: 2px 2px;
+  border-bottom: 1px solid #ecf0f1;
+  border-right: 1px solid #ecf0f1;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+
+td.hidden-column {
+  display: none;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+.pkill-item:hover {
+  background-color: #ffc0c0; /* Darker red for pkill on hover */
+}
+
+.gloried-item:hover {
+  background-color: #c0ffc0; /* Darker green for gloried on hover */
+}
+
+.not-in-game-item:hover {
+  background-color: #c0c0ff; /* Darker blue for not_in_game on hover */
+}
+
+tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+/* Pagination at bottom */
+#pagination {
+  display: flex;
+  padding: 5px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  gap: 5px;
+  align-items: center;
+  background: white;
+  border-top: 1px solid #ddd;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+#pagination button {
+  padding: 5px;
+  font-size: 0.8rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 3px;
+  min-width: 32px; /* Ensure consistent width for single and double digits */
+  text-align: center;
+}
+
+#pagination button:hover {
+  background: #f0f0f0;
+}
+
+.active {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.results-count {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+/* Modal styles - compact and fit within viewport */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 4px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow: auto;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  padding: 10px 15px;
+  background: #34495e;
+  color: white;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.modal-body {
+  padding: 15px;
+  flex: 1;
+  overflow: auto;
+}
+
+.modal-footer {
+  padding: 10px 15px;
+  background: #f8f9fa;
+  border-top: 1px solid #ddd;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.modal-footer button {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-weight: bold;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  cursor: pointer;
+  min-width: 80px;
+}
+
+.modal-footer button:first-child {
+  background: #3498db;
+  color: white;
+  border-color: #3498db;
+}
+
+.modal-footer button:first-child:hover {
+  background: #2980b9;
+}
+
+.modal-footer button:not(:first-child) {
+  background: #95a5a6;
+  color: white;
+  border-color: #95a5a6;
+}
+
+.modal-footer button:not(:first-child):hover {
+  background: #7f8c8d;
+}
+
+/* React filter panel - compact layout */
+#react-root {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 0.75rem;
+}
+
+/* Compact radio button groups */
+.filter-group {
+  margin-bottom: 10px;
+}
+
+.filter-group h3 {
+  margin: 0 0 5px 0;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 0;
+}
+
+.radio-item input[type="radio"] {
+  margin: 0;
+  transform: scale(0.8);
+}
+
+.radio-item label {
+  font-size: 0.75rem;
+  margin: 0;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+/* Constraints section */
+.constraints-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.constraint-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+}
+
+.constraint-item input[type="checkbox"] {
+  transform: scale(0.8);
+  margin: 0;
+}
+
+.constraint-item input[type="number"] {
+  width: 50px;
+  padding: 2px 4px;
+  font-size: 0.75rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  border: 1px solid #ddd;
+  border-radius: 2px;
+}
+
+.constraint-item label {
+  margin: 0;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+  
+  #controls {
+    padding: 5px;
+    gap: 5px;
+  }
+  
+  #controls input,
+  #controls select,
+  #controls button {
+    font-size: 0.8rem;
+    padding: 3px 6px;
+  }
+  
+  table {
+    font-size: 0.7rem;
+  }
+  
+  th, td {
+    padding: 1px;
+    font-size: 0.7rem;
+  }
+  
+  .modal-content {
+    max-width: 95vw;
+    max-height: 95vh;
+  }
+  
+  .constraints-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+/* Item Colorization */
+.pkill-item {
+  background-color: #ffe0e0; /* Light red for pkill items */
+}
+
+.gloried-item {
+  background-color: #e0ffe0; /* Light green for gloried items */
+}
+
+.not-in-game-item {
+  background-color: #e0e0ff; /* Light blue for not_in_game items */
+}
+
+

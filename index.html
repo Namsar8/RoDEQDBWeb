@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RoD Item Search</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="tailwind.min.css">
+</head>
+<body>
+  <h1>RoD Equipment Database Web Version</h1>
+  <div id="version"></div>
+    <div id="controls">
+      <input type="text" id="search" placeholder="Search items">
+      <select id="typeFilter">
+        <option value="">All Types</option>
+      </select>
+      <select id="raceFilter">
+        <option value="">All Races</option>
+      </select>
+      <select id="classFilter">
+        <option value="">All Classes</option>
+      </select>
+      <select id="alignFilter">
+        <option value="">All Aligns</option>
+      </select>
+      <select id="wearlocFilter">
+        <option value="">All Wearlocs</option>
+      </select>
+      <select id="areaFilter">
+        <option value="">All Areas</option>
+      </select>
+      <button id="openFilters">More Filters</button>
+      <button id="defaultView">Default View</button>
+    </div>
+    
+  <div id="main-content">
+    <div id="table-container">
+      <table id="results">
+        <thead>
+          <tr>
+            <th class="col-id">ID</th>
+            <th class="col-type">Type</th>
+            <th class="col-wearloc">Wearloc</th>
+            <th class="col-name">Name</th>
+            <th class="col-lv">Lv</th>
+            <th class="col-ac">AC</th>
+            <th class="col-acadd">-AC</th>
+            <th class="col-d1">d1</th>
+            <th class="col-d2">d2</th>
+            <th class="col-hr">HR</th>
+            <th class="col-dr">DR</th>
+            <th class="col-hp">HP</th>
+            <th class="col-mp">MP</th>
+            <th class="col-st">ST</th>
+            <th class="col-de">DE</th>
+            <th class="col-co">CO</th>
+            <th class="col-in">IN</th>
+            <th class="col-wi">WI</th>
+            <th class="col-lk">LK</th>
+            <th class="col-ch">CH</th>
+            <th class="col-mv">MV</th>
+            <th class="col-wgt">Wgt</th>
+            <th class="col-value">Value</th>
+            <th class="col-flags">Flags</th>
+            <th class="col-antis">Antis</th>
+            <th class="col-races">Races</th>
+            <th class="col-other">Other</th>
+            <th class="col-mob">Mob/Room</th>
+            <th class="col-area">Area</th>
+            <th class="col-date">Added</th>
+            <th class="col-user">Edited</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    
+    <div id="pagination" class="pagination"></div>
+  </div>
+
+  <!-- Filter Modal -->
+  <div id="filterModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        Advanced Filters
+      </div>
+      <div class="modal-body">
+        <div id="react-root"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="applyFilters">Apply Filters</button>
+        <button id="closeFilters">Reset to Defaults</button>
+        <button id="cancelFilters">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js?v=4"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@19.1.0",
+        "react-dom/client": "https://esm.sh/react-dom@19.1.0/client",
+        "react/jsx-runtime": "https://esm.sh/react@19.1.0/jsx-runtime"
+      }
+    }
+  </script>
+  <script type="module" src="build/index.js"></script>
+</body>
+</html>
+
