@@ -5,7 +5,7 @@ function initializeApp() {
 
   const RAW_FILE_URL = 'RoD_Item.txt';
   const VERSION_URL = 'version.json';
-  const FIELD_COUNT = 31; // Now 31 fields including ID
+  const FIELD_COUNT = 31;
 
   // Human friendly names for each field index (ID column added at index 0)
   const FIELD_LABELS = [
@@ -65,42 +65,37 @@ function initializeApp() {
     const headerHeight = document.querySelector("h1").offsetHeight;
     const controlsHeight = document.getElementById("controls").offsetHeight;
     const totalFixedHeaderHeight = headerHeight + controlsHeight;
-    const paginationHeight = Math.max(50, document.getElementById("pagination").offsetHeight);
-    console.log("paginationHeight:", {paginationHeight});
     document.body.style.paddingTop = `${totalFixedHeaderHeight}px`;
-    document.body.style.paddingBottom = `${paginationHeight}px`;
-    
-    // Recalculate items per page after layout change
     calculateItemsPerPage();
     displayResults();
     displayPagination();
+    const paginationHeight = document.getElementById("pagination").offsetHeight;
+    document.body.style.paddingBottom = `${paginationHeight}px`;
   }
   function calculateItemsPerPage() {
-    if (!tableContainer) return 25;
-    
-    const viewportHeight = window.innerHeight;
-    const clientHeight = document.documentElement.clientHeight;
-    const tableHeaderHeight = document.querySelector("#results thead").offsetHeight;
-    const bodyPaddingTop = parseFloat(getComputedStyle(document.body).paddingTop);
-    const bodyPaddingBottom = parseFloat(getComputedStyle(document.body).paddingBottom);
-    const rowHeight = 22; // Keep existing row height
-    
-    const availableHeight = viewportHeight - bodyPaddingTop - tableHeaderHeight - bodyPaddingBottom; // Reduced buffer
-    const calculatedItems = Math.floor(availableHeight / rowHeight);
-    itemsPerPage = Math.max(5, Math.min(100, calculatedItems)); // Min 5, max 100
-    
-    console.log("Pagination calculation:", {
-      viewportHeight,
-      clientHeight,
-      bodyPaddingTop,
-      bodyPaddingBottom,
-      tableHeaderHeight,
-      availableHeight,
-      calculatedItems,
-      finalItemsPerPage: itemsPerPage
-    });
-    
-    return itemsPerPage;
+  if (!tableContainer) return 25;
+  const tableHeight = tableContainer.offsetHeight;
+  const tableHeaderHeight = document.querySelector("#results thead")?.offsetHeight || 0;
+  
+  // Try to measure a real row’s height
+  const tempRow = document.querySelector("#results tbody tr");
+  const rowHeight = tempRow ? tempRow.offsetHeight : 23;
+  
+  const availableHeight = tableHeight - tableHeaderHeight - 10;
+  const calculatedItems = Math.floor(availableHeight / (rowHeight));
+  
+  itemsPerPage = Math.max(5, Math.min(100, calculatedItems));
+  
+  console.log("Dynamic Pagination Calculation:", {
+    tableHeight,
+    tableHeaderHeight,
+    rowHeight,
+    availableHeight,
+    calculatedItems,
+    finalItemsPerPage: itemsPerPage
+  });
+  
+  return itemsPerPage;
   }
 
   // Recalculate pagination on window resize
@@ -643,7 +638,18 @@ function initializeApp() {
       }
     };
     paginationDiv.appendChild(nextBtn);
-    
+
+    // last button (always present)
+    const lastBtn = document.createElement('button');
+    lastBtn.textContent = 'Last';
+    lastBtn.disabled = currentPage === totalPages;
+    lastBtn.onclick = () => {
+      currentPage = totalPages;
+      displayResults();
+      displayPagination();
+    };
+    paginationDiv.appendChild(lastBtn);
+
     // Results count
     const countDiv = document.createElement('div');
     countDiv.className = 'results-count';
@@ -853,6 +859,7 @@ function initializeApp() {
       setupTableHeaders();
       setupScrollToPaginate();
       filterItems();
+      updateMainContentLayout(); // needs to be done twice because of some elements painting inside others and resizing flexes.
     })
     .catch(err => {
       console.error('Error loading data:', err);

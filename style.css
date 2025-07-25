@@ -7,6 +7,15 @@ body {
   overflow-x: auto;
 }
 
+html, body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
 h1 {
   color: #2c3e50;
   text-align: center;
@@ -113,27 +122,26 @@ h1 {
   background-color: #7f8c8d;
 }
 
-/* Main content area with top margin for fixed headers */
 #main-content {
+  flex: 1 1 auto;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  padding-bottom: 42px;
+  box-sizing: border-box;
 }
 
-/* Table container with NO vertical scroll */
 #table-container {
   flex: 1;
   overflow-x: auto;
-  overflow-y: hidden; /* No vertical scroll */
-  border: 1px solid #ddd;
+  overflow-y: hidden;
+  min-height: 0;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
   background: white;
-  font-size: 0.75rem;
+  font-size: 12px;
   font-family: 'Consolas', 'Courier New', monospace;
   table-layout: fixed; /* Force fixed table layout */
 }
@@ -263,6 +271,7 @@ tr:nth-child(even) {
   border-top: 1px solid #ddd;
   font-size: 0.8rem;
   flex-shrink: 0;
+  z-index: 10;
 }
 
 #pagination button {
@@ -273,7 +282,7 @@ tr:nth-child(even) {
   background: white;
   cursor: pointer;
   border-radius: 3px;
-  min-width: 32px; /* Ensure consistent width for single and double digits */
+  min-width: 35px; /* Ensure consistent width for single and tripple digits */
   text-align: center;
 }
 
@@ -283,7 +292,7 @@ tr:nth-child(even) {
 
 .active {
   background: #3498db;
-  color: white;
+  color: red;
   border-color: #3498db;
 }
 
